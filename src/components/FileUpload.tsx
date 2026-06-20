@@ -6,9 +6,10 @@ interface FileUploadProps {
   onFileSelect: (file: File) => void
   disabled?: boolean
   accept?: string
+  hintText?: string
 }
 
-export function FileUpload({ onFileSelect, disabled = false, accept = '.pdf,.doc,.docx,.txt' }: FileUploadProps) {
+export function FileUpload({ onFileSelect, disabled = false, accept = '.pdf,.docx,.txt', hintText }: FileUploadProps) {
   const handleFileChange = (info: { file: any }) => {
     const file = info.file.originFileObj || info.file
     
@@ -43,7 +44,7 @@ export function FileUpload({ onFileSelect, disabled = false, accept = '.pdf,.doc
         <UploadOutlined style={{ fontSize: 48, color: '#1677ff' }} />
       </p>
       <p className="ant-upload-text">点击或拖拽文件到此处上传</p>
-      <p className="ant-upload-hint">支持 PDF、DOC、DOCX、TXT、XLS、XLSX 格式，最大50MB</p>
+      <p className="ant-upload-hint">{hintText || '支持 PDF、DOCX、TXT 格式，最大50MB'}</p>
       <Button type="primary" ghost size="large" style={{ marginTop: 16 }}>
         选择文件
       </Button>

@@ -64,7 +64,18 @@ export function ContractReview() {
               <Alert message={error} type="error" style={{ marginBottom: 16 }} />
             )}
             
-            <FileUpload onFileSelect={handleFileSelect} disabled={loading} />
+            <FileUpload 
+              onFileSelect={handleFileSelect} 
+              disabled={loading}
+              accept=".pdf,.docx,.txt"
+              hintText="支持 PDF、DOCX、TXT 格式，最大50MB"
+            />
+            
+            <div style={{ marginTop: 16, padding: 12, background: '#fff7e6', borderRadius: 8, border: '1px solid #ffe58f' }}>
+              <Text type="warning">
+                ⚠️ 注意：不支持旧版 <strong>.doc</strong> 和 <strong>.xls</strong> 格式。请在Word中打开文件后，选择"另存为"并保存为 <strong>.docx</strong> 格式后再上传。
+              </Text>
+            </div>
             
             {selectedFile && (
               <div style={{ marginTop: 16, padding: 16, background: '#f0f5ff', borderRadius: 8 }}>

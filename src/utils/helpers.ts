@@ -26,8 +26,8 @@ export function formatFileSize(bytes: number): string {
 }
 
 export function isValidFileType(file: File): boolean {
-  const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
-  const allowedExtensions = ['.pdf', '.doc', '.docx', '.txt', '.xls', '.xlsx']
+  const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+  const allowedExtensions = ['.pdf', '.docx', '.txt', '.xlsx']
   
   const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase() || ''
   
