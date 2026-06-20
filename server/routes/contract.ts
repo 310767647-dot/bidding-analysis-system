@@ -32,7 +32,8 @@ export function contractRoutes(upload: multer.Multer): express.Router {
       res.json(result)
     } catch (error) {
       console.error('合同分析错误:', error)
-      res.status(500).json({ error: '分析失败，请重试' })
+      const errorMessage = error instanceof Error ? error.message : '分析失败，请重试'
+      res.status(500).json({ error: errorMessage })
     }
   })
   

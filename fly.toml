@@ -1,6 +1,5 @@
 app = "bidding-analysis-system"
 primary_region = "sin"
-remote_only = true
 
 [build]
   dockerfile = "Dockerfile"

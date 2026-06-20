@@ -56,9 +56,10 @@ export function biddingRoutes(upload: multer.Multer): express.Router {
       }
       
       res.json(result)
-    } catch (error: any) {
+    } catch (error) {
       console.error('招标文件分析错误:', error)
-      res.status(500).json({ error: '分析失败，请重试', detail: error?.message || String(error) })
+      const errorMessage = error instanceof Error ? error.message : '分析失败，请重试'
+      res.status(500).json({ error: errorMessage })
     }
   })
   

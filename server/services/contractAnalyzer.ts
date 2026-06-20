@@ -113,14 +113,16 @@ export async function extractTextFromFile(filePath: string): Promise<string> {
     const data = await fs.promises.readFile(filePath)
     const pdfData = await pdfParse(data)
     return pdfData.text
-  } else if (ext === '.doc' || ext === '.docx') {
+  } else if (ext === '.docx') {
     const data = await fs.promises.readFile(filePath)
     const result = await mammoth.extractRawText({ buffer: data })
     return result.value
+  } else if (ext === '.doc') {
+    throw new Error('不支持旧版 .doc 格式，请将文件另存为 .docx 格式后再上传')
   } else if (ext === '.txt') {
     return await fs.promises.readFile(filePath, 'utf-8')
   } else {
-    throw new Error(`不支持的文件格式: ${ext}`)
+    throw new Error(`不支持的文件格式: ${ext}，仅支持 PDF、DOCX、TXT 格式`)
   }
 }
 
