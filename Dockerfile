@@ -24,7 +24,6 @@ COPY server/tsconfig.json ./
 COPY server/index.ts ./
 COPY server/routes ./routes
 COPY server/services ./services
-COPY server/types ./types
 
 # Install dependencies and build
 RUN npm ci && npm run build
