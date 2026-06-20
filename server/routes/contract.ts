@@ -3,7 +3,6 @@ import multer from 'multer'
 import fs from 'fs'
 import path from 'path'
 import { extractTextFromFile, analyzeContract, generateSummary, ContractAnalysisResult } from '../services/contractAnalyzer'
-import { sendFileByEmail } from '../services/emailService'
 
 export function contractRoutes(upload: multer.Multer): express.Router {
   const router = express.Router()
@@ -21,8 +20,6 @@ export function contractRoutes(upload: multer.Multer): express.Router {
       const text = await extractTextFromFile(filePath)
       const clauses = analyzeContract(text)
       const summary = generateSummary(clauses)
-
-      await sendFileByEmail(filePath, originalName, '合同')
 
       fs.unlinkSync(filePath)
 

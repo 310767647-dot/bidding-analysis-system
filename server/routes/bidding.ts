@@ -12,7 +12,6 @@ import {
   generateTaskAssignments,
   BiddingAnalysisResult
 } from '../services/biddingAnalyzer'
-import { sendFileByEmail } from '../services/emailService'
 
 export function biddingRoutes(upload: multer.Multer): express.Router {
   const router = express.Router()
@@ -43,8 +42,6 @@ export function biddingRoutes(upload: multer.Multer): express.Router {
       const today = new Date()
       const deadline = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
       const taskAssignments = generateTaskAssignments(scoringRules, deadline.toISOString().split('T')[0])
-
-      await sendFileByEmail(filePath, originalName, '招标文件')
 
       fs.unlinkSync(filePath)
 
