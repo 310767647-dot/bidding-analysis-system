@@ -28,6 +28,9 @@ COPY server/services ./services
 # Install dependencies and build
 RUN npm ci && npm run build
 
+# Copy pdfjs-dist worker files
+RUN cp -r node_modules/pdfjs-dist ./pdfjs-dist
+
 # Final stage
 FROM node:20-alpine
 
@@ -36,6 +39,7 @@ WORKDIR /app
 # Copy built server
 COPY --from=server-builder /app/dist ./dist
 COPY --from=server-builder /app/node_modules ./node_modules
+COPY --from=server-builder /app/pdfjs-dist ./pdfjs-dist
 COPY server/package.json ./
 
 # Copy built frontend

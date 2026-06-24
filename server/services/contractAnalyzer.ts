@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
-import pdfParse from 'pdf-parse'
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js'
 import mammoth from 'mammoth'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/legacy/build/pdf.worker.js'
 
 export interface ContractClause {
   type: string
@@ -110,9 +112,35 @@ export async function extractTextFromFile(filePath: string): Promise<string> {
   const ext = path.extname(filePath).toLowerCase()
   
   if (ext === '.pdf') {
-    const data = await fs.promises.readFile(filePath)
-    const pdfData = await pdfParse(data)
-    return pdfData.text
+    try {
+      const data = await fs.promises.readFile(filePath)
+      console.log(`[PDF解析] 文件大小: ${data.length} 字节`)
+      
+      const pdf = await pdfjsLib.getDocument({ data }).promise
+      const numPages = pdf.numPages
+      console.log(`[PDF解析] PDF页数: ${numPages}`)
+      
+      let text = ''
+      for (let i = 1; i <= numPages; i++) {
+        const page = await pdf.getPage(i)
+        const content = await page.getTextContent()
+        const pageText = content.items.map(item => {
+          return (item as { str: string }).str
+        }).join('\n')
+        text += pageText + '\n'
+      }
+      
+      console.log(`[PDF解析] 提取文本长度: ${text.length} 字符`)
+      
+      if (!text || text.trim().length === 0) {
+        throw new Error('PDF文件内容为空或无法提取文本，请尝试使用其他工具转换文件')
+      }
+      
+      return text
+    } catch (pdfError) {
+      console.error('[PDF解析错误]:', pdfError)
+      throw new Error(`PDF解析失败: ${pdfError instanceof Error ? pdfError.message : '未知错误'}`)
+    }
   } else if (ext === '.docx') {
     const data = await fs.promises.readFile(filePath)
     const result = await mammoth.extractRawText({ buffer: data })
